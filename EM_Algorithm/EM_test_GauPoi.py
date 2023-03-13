@@ -1,8 +1,13 @@
-import matplotlib.pyplot as plt
 
+import sys
+sys.path.append('/Users/youyang/Library/Mobile Documents/com~apple~CloudDocs/化學系/NTU/Lab/OT_Experiment/PythonCode/Python_for_Lab_YCC/')
+
+import matplotlib.pyplot as plt
+import numpy as np
 from EM_Algorithm.gen_gauss import gen_gauss
 from EM_Algorithm.gen_poisson import gen_poisson
-from EM_Algorithm.EM import *
+from EM_Algorithm.EM import EM
+# from EM_Algorithm.EM import *
 
 if __name__ == '__main__':
     fontsize = 12

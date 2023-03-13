@@ -291,11 +291,11 @@ class EM:
         plt.tight_layout()
         plt.show()
         if save == True:
-            save_img(fig, path)
+            save_img(fig, path,dpi=300)
 
 
     def plot_gp_contour_2hist(self, xlim=None, ylim=None, figsize=(10,10), fontsize=12, bins_x=10, bins_y=10,
-                              save=False, path='2d_scatter.png'):
+                              save=False, path='2d_scatter.png', OutputFile='Output'):
         data = self.data
         paras = self.para_final
         labels, data_cluster = self.predict(data, function=ln_gau_exp_pdf, paras=paras)
@@ -341,13 +341,20 @@ class EM:
         ax_histx.spines[:].set_linewidth('1.5')  ## xy, axis width
         ax_histx.tick_params(width=1.5)  ## tick width
         ax_histx.set_yticks([])
+        ax_histx.tick_params('x', labelbottom=False)
         ## survival plot
         ax_histy = fig.add_subplot(gs[1, 1], sharey=ax)
         data_series = pd.Series(data[:,1].ravel())
         E = pd.Series(np.ones(len(data[:,1]))) ## 1 = death
-        kmf = KaplanMeierFitter()
-        kmf.fit(data_series, event_observed=E)
-        kmf.plot_survival_function(ax=ax_histy)
+        kmf = KaplanMeierFitter(label='Dwell')
+        kmf.fit(data_series)
+        KMF_S=kmf.survival_function_
+        KMF_T=kmf.timeline
+        KMF_CI=kmf.confidence_interval_
+        KMF_LowCI=kmf.confidence_interval_['Dwell_lower_0.95']
+        KMF_UpCI=kmf.confidence_interval_['Dwell_upper_0.95']
+        ax_histy.fill_betweenx(KMF_T, KMF_LowCI, KMF_UpCI, step='post', alpha=0.25, edgecolor='#3584bb')
+        ax_histy.step(KMF_S['Dwell'], KMF_T ,where='post')
 
         y_fit = exp_survival(x, args=[paras[0]]+[paras[3]])
         for i in range(len(paras[0])):
@@ -356,13 +363,26 @@ class EM:
         ax_histy.spines[:].set_linewidth('1.5')  ## xy, axis width
         ax_histy.tick_params(width=1.5)  ## tick width
         ax_histy.set_xticks([])
+        ax_histy.tick_params('y', labelleft=False)
 
-        ax_histy.get_legend().remove() ## remove legend
+   #     kmf.plot_survival_function(ax=ax_histy)
+   #     ax_histy.get_legend().remove() ## remove legend
 
         # ax_histy.hist(data[:,1], bins=bins_y, orientation='horizontal', color='grey', edgecolor="white")
-        plt.show
+        plt.show()
         if save == True:
             save_img(fig, path)
+            ## Save Cluster
+            print(str(len(data_cluster)),file=open(OutputFile,'w'))
+            for i,fit in enumerate(data_fitted):
+                n=int(data_cluster[i].shape[0])
+                print('Cluster ' + str(i) + ' :'+str(n) + ':',file=open(OutputFile,'a'))
+            for i,fit in enumerate(data_fitted):
+                n=int(data_cluster[i].shape[0])
+                for j in range(n):
+                    print(str(data_cluster[i][j, 0])+','+str(data_cluster[i][j, 1])+',',file=open(OutputFile,'a'))
+
+            
 
 
     def plot_gp_surface(self, x_end=20, t_end=10, xlabel='Step-size (count)', ylabel='Dwell-time (s)', zlabel='probability density'):

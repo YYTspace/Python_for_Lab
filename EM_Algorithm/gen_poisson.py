@@ -16,3 +16,4 @@ if __name__ == "__main__":
     bin_width = (12/n_sample)**(1/3)*np.mean(data) ## scott's formula for poisson process
     bin_number = int((max(data)-min(data))/bin_width)
     pd, center = binning(data, bin_number, xlabel='dwell time (s)')
+

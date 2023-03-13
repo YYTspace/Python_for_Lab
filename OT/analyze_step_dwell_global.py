@@ -46,11 +46,13 @@ if __name__ == '__main__':
     # path_folder = r'/home/hwligroup/Desktop/Data/step-dwell time/m51'
     # path_folder = r'/home/hwligroup/Desktop/Data/step-dwell time/m51 + mSS'
 
-    path_folder = r'C:\Users\pine\Desktop\Data\step-dwell time\m51'
+    # path_folder = r'C:\Users\pine\Desktop\Data\step-dwell time\m51'
     # path_folder = r'C:\Users\pine\Desktop\Data\step-dwell time\EcRecA'
     # path_folder = r'C:\Users\pine\Desktop\Data\step-dwell time\m51 + mSS'
     # path_folder = r'C:\Users\pine\Desktop\Data\step-dwell time\m51 + mSS - v2(0619)'
     # path_folder = r'C:\Users\pine\Desktop\Data\step-dwell time\m51 + mSS - v3(0621)'
+    path_folder = r'/Users/youyang/Library/Mobile Documents/com~apple~CloudDocs/化學系/NTU/Lab/OT_Experiment/' \
+                  r'Projects/m51_mSS/YYT/m51_mSS_copy from dropbox 20230116/Data/time trace/m51+mSS all traces/mat'
 
     step, dwell = collect_all(path_folder, conc)
 
@@ -88,9 +90,9 @@ if __name__ == '__main__':
     df = pd.concat([df_f, df_m, df_s, df_tau, df_LLE], axis=1)
 
     ## save to disk
-    writer = pd.ExcelWriter(f'{gen_random_code(3)}_EM_results.xlsx')
-    df.to_excel(writer, sheet_name='EM', index=True)
-    writer.save()
+    # writer = pd.ExcelWriter(f'{gen_random_code(3)}_EM_results.xlsx')
+    # df.to_excel(writer, sheet_name='EM', index=True)
+    # writer.save()
 
 
 
